@@ -7,13 +7,15 @@ def main():
     parser = argparse.ArgumentParser(description="Sync local and Google Drive file.")
     parser.add_argument("local_file", type=str, help="Path to the local file")
     parser.add_argument("drive_file", type=str, help="Path to the file on Google Drive")
+    parser.add_argument("credential_file", type=str, help="Path to the credentials to Google Services")
     args = parser.parse_args()
 
     print(f"Local file: {args.local_file}")
     print(f"Drive file: {args.drive_file}")
+    print(f"Credential file: {args.credential_file}")
 
     local_manager = LocalManager(args.local_file)
-    drive_manager = DriveManager(args.drive_file)
+    drive_manager = DriveManager(args.drive_file, args.credential_file)
 
     # make sure the local file is up to date
     drive_manager.download(args.local_file)

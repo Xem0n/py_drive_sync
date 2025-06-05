@@ -10,21 +10,21 @@ class DriveManager:
         'https://www.googleapis.com/auth/drive.metadata.readonly',
         'https://www.googleapis.com/auth/drive.readonly',
     ]
-    SERVICE_ACCOUNT_FILE = 'credentials.json'
 
-    def __init__(self, file_id):
+    def __init__(self, file_id, credentials_file):
         self.__file_id = file_id
+        self.__credential_file = credentials_file
         self.__last_modified_time = None
         self.__ignore_changes = False
 
         creds = service_account.Credentials.from_service_account_file(
-            self.SERVICE_ACCOUNT_FILE, scopes=self.SERVICE_SCOPES)
+            self.__credential_file, scopes=self.SERVICE_SCOPES)
         self.__service = build('drive', 'v3', credentials=creds)
 
     def watch(self, on_change):
         # accessing same service on multiple threads is not safe, so we create a new service instance
         creds = service_account.Credentials.from_service_account_file(
-            self.SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/drive.metadata.readonly'])
+            self.__credential_file, scopes=['https://www.googleapis.com/auth/drive.metadata.readonly'])
         service = build('drive', 'v3', credentials=creds)
         self.__last_modified_time = None
 
